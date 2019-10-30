@@ -1,0 +1,4 @@
+name = "Quantum"
+uuid = "a321d746-817a-42d3-ae53-280bb3792694"
+authors = ["Ergoold <34137153+Ergoold@users.noreply.github.com>"]
+version = "0.1.0"
