@@ -1,10 +1,3 @@
-#=
-runtests:
-- Julia version: 1.2.0
-- Author: user
-- Date: 2019-10-31
-=#
-
 using Quantum, Test
 
 @testset "Quantum" begin
