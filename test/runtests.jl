@@ -16,4 +16,16 @@ using Quantum, Test
             @test length(QuantumRegister(4)) == 4
         end
     end
+    @testset "Basic Gates" begin
+        @testset "X" begin
+            @test X(QuantumRegister(1), 1) == [0, 1]
+            @test X(QuantumRegister(2), 1) == [0, 0, 1, 0]
+            @test X(QuantumRegister(2), 2) == [0, 1, 0, 0]
+            @test X(QuantumRegister(3), 2) == [0, 0, 1, 0, 0, 0, 0, 0]
+        end
+        @testset "H" begin
+            @test H(QuantumRegister(1), 1) == [1/√2, 1/√2]
+            @test H(X(QuantumRegister(1), 1)) == [1/√2, -1/√2]
+        end
+    end
 end
