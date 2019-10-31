@@ -1,8 +1,7 @@
 module Quantum
 
 using LinearAlgebra
-import Base.==
-import Base.length
+import Base: ==, length
 
 export QuantumRegister
 
