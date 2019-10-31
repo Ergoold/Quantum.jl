@@ -5,10 +5,6 @@ import Base: ==, length
 
 export QuantumRegister
 
-⊗ = kron
-⊗(matrix::Matrix, eye::UniformScaling) = matrix ⊗ (zeros(2, 2) + UniformScaling)
-⊗(eye::UniformScaling, matrix::Matrix) = (zeros(2, 2) + UniformScaling) ⊗ matrix
-
 struct QuantumRegister
     qubit_product::Vector{Float64}
     QuantumRegister(length::Int) = new(vcat([1], zeros(Float64, 2 ^ length - 1)))
@@ -20,12 +16,13 @@ end
 
 # Because `QuantumRegister` saves the tensor product of all its qubits,
 # its length is 2^n (where n is the amount of qubits)
-length(register::QuantumRegister) = Int(log2(length(register.qubit_product)))
+length(register::QuantumRegister) = log2size(register.qubit_product)
 
-function pad_matrix(matrix::Matrix, size::Int)
-    if(size(matrix, 1) > size)
-        throw(ArgumentError("Matrix is too big"))
-    end
-end
+pad_matrix(matrix::Matrix, tosize::Int, from::Int) =
+    foldl(kron, vcat(fill(I₂, from - 1), [matrix], fill(I₂, tosize - from - log2size(matrix) + 1)))
+
+log2size(array::Array) = Int(log2(size(array, 1)))
+
+I₂ = [1 0 ; 0 1]
 
 end # module
