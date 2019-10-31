@@ -27,5 +27,10 @@ using Quantum, Test
             @test H(QuantumRegister(1), 1) == [1/√2, 1/√2]
             @test H(X(QuantumRegister(1), 1)) == [1/√2, -1/√2]
         end
+        @testset "CNOT" begin
+            @test CNOT(QuantumRegister(2), 1, 2) == [1, 0, 0, 0]
+            @test CNOT(X(QuantumRegister(2), 1), 2, 1) == [0, 0, 1, 0]
+            @test CNOT(X(QuantumRegister(3), 1), 1, 3) == [0, 0, 0, 0, 0, 1, 0, 0]
+        end
     end
 end
