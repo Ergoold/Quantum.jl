@@ -33,8 +33,4 @@ using Quantum, Test
             @test CNOT(X(QuantumRegister(3), 1), 1, 3) == [0, 0, 0, 0, 0, 1, 0, 0]
         end
     end
-    @testset "Indev" begin
-        @test swap_rows([1 0 0 0 ; 0 1 0 0 ; 0 0 1 0 ; 0 0 0 1], 2, 3) == [1 0 0 0 ; 0 0 1 0 ; 0 1 0 0 ; 0 0 0 1]
-        @test swap_matrix(2) == [1 0 0 0 ; 0 0 1 0 ; 0 1 0 0 ; 0 0 0 1]
-    end
 end
