@@ -22,4 +22,10 @@ end
 # its length is 2^n (where n is the amount of qubits)
 length(register::QuantumRegister) = Int(log2(length(register.qubit_product)))
 
+function pad_matrix(matrix::Matrix, size::Int)
+    if(size(matrix, 1) > size)
+        throw(ArgumentError("Matrix is too big"))
+    end
+end
+
 end # module
