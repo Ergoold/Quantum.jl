@@ -5,6 +5,10 @@ import Base: ==, length
 
 export QuantumRegister
 
+⊗ = kron
+⊗(matrix::Matrix, eye::UniformScaling) = matrix ⊗ (zeros(2, 2) + UniformScaling)
+⊗(eye::UniformScaling, matrix::Matrix) = (zeros(2, 2) + UniformScaling) ⊗ matrix
+
 struct QuantumRegister
     qubit_product::Vector{Float64}
     QuantumRegister(length::Int) = new(vcat([1], zeros(Float64, 2 ^ length - 1)))
