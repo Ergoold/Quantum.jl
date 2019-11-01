@@ -3,10 +3,10 @@ module Quantum
 using LinearAlgebra
 import Base: ==, length
 
-export swap_matrix, swap_rows!
+export Swap
 export QuantumRegister
 
-struct QuantumRegister
+mutable struct QuantumRegister
     qubit_product::Vector{Float64}
     QuantumRegister(length::Int) = new(vcat([1], zeros(Float64, 2^length - 1)))
 end
@@ -16,8 +16,18 @@ end
 ==(a::QuantumRegister, b::QuantumRegister) = a.qubit_product == b.qubit_product
 
 # Because `QuantumRegister` saves the tensor product of all its qubits,
-# its length is 2^n (where n is the amount of qubits)
+# its length is 2^n (where n is the amount of qubits) and needs to be modified
 length(register::QuantumRegister) = log2size(register.qubit_product)
+
+# This is where the real gates start
+
+Swap(register::QuantumRegister, from::Int, to::Int) =
+    apply!(register, pad_matrix(swap_matrix(abs(to - from)), length(register), max(from, to)))
+
+# Helper functions for the gates
+
+apply!(register::QuantumRegister, matrix::Matrix) =
+    register.qubit_product = matrix * register.qubit_product
 
 pad_matrix(matrix::Matrix, tosize::Int, from::Int) =
     # kron together identity matrices with `matrix` in index `from`
