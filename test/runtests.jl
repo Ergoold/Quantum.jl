@@ -35,6 +35,7 @@ using Quantum, Test
         @testset "Swap" begin
             @test Swap(QuantumRegister(2), 1, 2) == [1, 0, 0, 0]
             @test Swap(QuantumRegister(2), 2, 1) == [1, 0, 0, 0]
+            @test Swap(X(QuantumRegister(2), 1), 1, 2) == [0, 1, 0, 0]
             @test Swap(X(QuantumRegister(2), 1), 2, 1) == [0, 1, 0, 0]
         end
     end

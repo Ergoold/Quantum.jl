@@ -3,7 +3,7 @@ module Quantum
 using LinearAlgebra
 import Base: ==, length
 
-export Swap
+export Swap, X
 export QuantumRegister
 
 mutable struct QuantumRegister
@@ -24,10 +24,16 @@ length(register::QuantumRegister) = log2size(register.qubit_product)
 Swap(register::QuantumRegister, from::Int, to::Int) =
     apply!(register, pad_matrix(swap_matrix(abs(to - from)), length(register), max(from, to)))
 
+X(register::QuantumRegister, at::Int) =
+    apply!(register, pad_matrix([0 1 ; 1 0], length(register), at))
+
 # Helper functions for the gates
 
-apply!(register::QuantumRegister, matrix::Matrix) =
+function apply!(register::QuantumRegister, matrix::Matrix)
     register.qubit_product = matrix * register.qubit_product
+
+    return register
+end
 
 pad_matrix(matrix::Matrix, tosize::Int, from::Int) =
     # kron together identity matrices with `matrix` in index `from`
