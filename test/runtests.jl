@@ -32,5 +32,9 @@ using Quantum, Test
             @test CNOT(X(QuantumRegister(2), 1), 2, 1) == [0, 0, 1, 0]
             @test CNOT(X(QuantumRegister(3), 1), 1, 3) == [0, 0, 0, 0, 0, 1, 0, 0]
         end
+        @testset "Swap" begin
+            @test Swap(QuantumRegister(2), 1, 2) == [1, 0, 0, 0]
+            @test Swap(X(QuantumRegister(2), 1), 2, 1) == [0, 1, 0, 0]
+        end
     end
 end
