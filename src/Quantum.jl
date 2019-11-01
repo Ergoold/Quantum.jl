@@ -22,7 +22,7 @@ length(register::QuantumRegister) = log2size(register.qubit_product)
 # This is where the real gates start
 
 Swap(register::QuantumRegister, from::Int, to::Int) =
-    apply!(register, swap_matrix(abs(to - from)), max(from, to))
+    apply!(register, swap_matrix(abs(to - from) + 1), min(from, to))
 
 X(register::QuantumRegister, at::Int) =
     apply!(register, [0 1 ; 1 0], at)
