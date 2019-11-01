@@ -3,12 +3,12 @@ module Quantum
 using LinearAlgebra
 import Base: ==, length
 
-export swap_matrix, swap_rows
+export swap_matrix, swap_rows!
 export QuantumRegister
 
 struct QuantumRegister
     qubit_product::Vector{Float64}
-    QuantumRegister(length::Int) = new(vcat([1], zeros(Float64, 2 ^ length - 1)))
+    QuantumRegister(length::Int) = new(vcat([1], zeros(Float64, 2^length - 1)))
 end
 
 ==(register::QuantumRegister, vector::Vector) = register.qubit_product == vector
@@ -24,10 +24,18 @@ pad_matrix(matrix::Matrix, tosize::Int, from::Int) =
     foldl(kron, vcat(fill(I₂, from - 1), [matrix], fill(I₂, tosize - from - log2size(matrix) + 1)))
 
 function swap_matrix(span::Int)
+    matrix = I + zeros(2^span, 2^span)
 
+    for i in 1:2^(span - 1)
+        if iseven(i)
+            swap_rows!(matrix, i, i + 2^(span - 1) - 1)
+        end
+    end
+
+    matrix
 end
 
-function swap_rows(matrix::Matrix, x::Int, y::Int)
+function swap_rows!(matrix::Matrix, x::Int, y::Int)
     for i in 1:size(matrix, 2)
         temp = matrix[x, i]
         matrix[x, i] = matrix[y, i]
