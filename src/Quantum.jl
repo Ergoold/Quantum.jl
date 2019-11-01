@@ -28,7 +28,7 @@ X(register::QuantumRegister, at::Int) =
     apply!(register, [0 1 ; 1 0], at)
 
 H(register::QuantumRegister, at::Int) =
-    apply!(register, [1 / √2 1 / √2 ; 1 / √2 - 1 / √2], at)
+    apply!(register, [1 / √2 1 / √2 ; 1 / √2 -1 / √2], at)
 
 function CNOT(register::QuantumRegister, control::Int, target::Int)
     _control = control
