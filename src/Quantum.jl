@@ -3,7 +3,7 @@ module Quantum
 using LinearAlgebra
 import Base: ==, length
 
-export Swap, X, H
+export Swap, X, H, CNOT
 export QuantumRegister
 
 mutable struct QuantumRegister
@@ -30,12 +30,40 @@ X(register::QuantumRegister, at::Int) =
 H(register::QuantumRegister, at::Int) =
     apply!(register, [1/√2 1/√2 ; 1/√2 -1/√2], at)
 
+function CNOT(register::QuantumRegister, control::Int, target::Int)
+    _control = control
+    _target = target
+
+    if(control == length(register))
+        _control -= 1
+        Swap(register, control, _control)
+        if(_control == target)
+            _target = control
+        end
+    end
+
+    if(_control + 1 != _target)
+        _target = _control + 1
+        Swap(register, target, _target)
+    end
+
+    apply!(register, [1 0 0 0 ; 0 1 0 0 ; 0 0 0 1 ; 0 0 1 0], _control)
+
+    Swap(register, _target, target)
+
+    if(_control == _target)
+        Swap(register, _control, control)
+    end
+
+    register
+end
+
 # Helper functions for the gates
 
 function apply!(register::QuantumRegister, matrix::Matrix, from::Int)
     register.qubit_product = pad_matrix(matrix, length(register), from) * register.qubit_product
 
-    return register
+    register
 end
 
 pad_matrix(matrix::Matrix, tosize::Int, from::Int) =
