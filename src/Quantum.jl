@@ -19,25 +19,24 @@ end
 # its length is 2^n (where n is the amount of qubits) and needs to be modified
 length(register::QuantumRegister) = log2size(register.qubit_product)
 
+# This function is placed here because it gives an `UndefVarError` bellow
+single_qubit_gate(matrix::Matrix) =
+    (register::QuantumRegister, at::Int) -> apply!(register, matrix, at)
+
 # This is where the real gates start
 
 Swap(register::QuantumRegister, from::Int, to::Int) =
     apply!(register, swap_matrix(abs(to - from) + 1), min(from, to))
 
-X(register::QuantumRegister, at::Int) =
-    apply!(register, [0 1 ; 1 0], at)
+X = single_qubit_gate([0 1 ; 1 0])
 
-Y(register::QuantumRegister, at::Int) =
-    apply!(register, [0 -im ; im 0], at)
+Y = single_qubit_gate([0 -im ; im 0])
 
-Z(register::QuantumRegister, at::Int) =
-    apply!(register, [1 0 ; 0 -1], at)
+Z = single_qubit_gate([1 0 ; 0 -1])
 
-H(register::QuantumRegister, at::Int) =
-    apply!(register, [1 / √2 1 / √2 ; 1 / √2 -1 / √2], at)
+H = single_qubit_gate([1/√2 1/√2 ; 1/√2 -1/√2])
 
-S(register::QuantumRegister, at::Int) =
-    apply!(register, [1 0 ; 0 im], at)
+S = single_qubit_gate([1 0 ; 0 im])
 
 function CNOT(register::QuantumRegister, control::Int, target::Int)
     _control = control
