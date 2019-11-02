@@ -48,5 +48,9 @@ using Quantum, Test
             @test Y(QuantumRegister(1), 1) == [0.0, im]
             @test Y(X(QuantumRegister(1), 1), 1) == [-im, 0.0]
         end
+        @testset "Z" begin
+            @test Z(QuantumRegister(1), 1) == [1, 0]
+            @test Z(X(QuantumRegister(1), 1), 1) == [0, -1]
+        end
     end
 end

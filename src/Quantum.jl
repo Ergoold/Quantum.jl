@@ -3,7 +3,7 @@ module Quantum
 using LinearAlgebra
 import Base: ==, length
 
-export Swap, X, Y, H, CNOT
+export Swap, X, Y, Z, H, CNOT
 export QuantumRegister
 
 mutable struct QuantumRegister
@@ -29,6 +29,9 @@ X(register::QuantumRegister, at::Int) =
 
 Y(register::QuantumRegister, at::Int) =
     apply!(register, [0 -im ; im 0], at)
+
+Z(register::QuantumRegister, at::Int) =
+    apply!(register, [1 0 ; 0 -1], at)
 
 H(register::QuantumRegister, at::Int) =
     apply!(register, [1 / √2 1 / √2 ; 1 / √2 -1 / √2], at)
