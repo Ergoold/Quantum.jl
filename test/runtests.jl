@@ -43,4 +43,10 @@ using Quantum, Test
             @test Swap(X(QuantumRegister(2), 1), 2, 1) == [0, 1, 0, 0]
         end
     end
+    @testset "Single Qubit" begin
+        @testset "Y" begin
+            @test Y(QuantumRegister(1), 1) == [0.0, im]
+            @test Y(X(QuantumRegister(1), 1), 1) == [-im, 0.0]
+        end
+    end
 end
