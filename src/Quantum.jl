@@ -3,7 +3,7 @@ module Quantum
 using LinearAlgebra
 import Base: ==, length
 
-export Swap, X, Y, Z, H, S, Sdag, T, CNOT
+export Swap, X, Y, Z, H, S, Sdag, T, Tdag, CNOT
 export QuantumRegister
 
 mutable struct QuantumRegister
@@ -41,6 +41,8 @@ S = single_qubit_gate([1 0 ; 0 im])
 Sdag = single_qubit_gate([1 0 ; 0 -im])
 
 T = single_qubit_gate([1 0 ; 0 exp(im * pi / 4)])
+
+Tdag = single_qubit_gate([1 0 ; 0 exp(-im * pi / 4)])
 
 function CNOT(register::QuantumRegister, control::Int, target::Int)
     _control = control
