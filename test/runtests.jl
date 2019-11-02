@@ -44,29 +44,23 @@ using Quantum, Test
         end
     end
     @testset "Single Qubit" begin
-        @testset "Y" begin
+        @testset "Pauli Gates" begin
             @test Y(QuantumRegister(1), 1) == [0.0, im]
             @test Y(X(QuantumRegister(1), 1), 1) == [-im, 0.0]
-        end
-        @testset "Z" begin
             @test Z(QuantumRegister(1), 1) == [1, 0]
             @test Z(X(QuantumRegister(1), 1), 1) == [0, -1]
         end
-        @testset "S" begin
+        @testset "S(dag)" begin
             @test S(QuantumRegister(1), 1) == [1, 0]
             @test S(X(QuantumRegister(1), 1), 1) == [0, im]
             @test S(QuantumRegister(1), 1) == T(T(QuantumRegister(1), 1), 1)
-        end
-        @testset "Sdag" begin
             @test Sdag(QuantumRegister(1), 1) == [1, 0]
             @test Sdag(X(QuantumRegister(1), 1), 1) == [0, -im]
         end
-        @testset "T" begin
+        @testset "T(dag)" begin
             @test T(QuantumRegister(1), 1) == [1, 0]
             @test T(X(QuantumRegister(1), 1), 1) == [0, exp(im * pi / 4)]
             @test T(T(QuantumRegister(1), 1), 1) == S(QuantumRegister(1), 1)
-        end
-        @testset "Tdag" begin
             @test Tdag(QuantumRegister(1), 1) == [1, 0]
             @test Tdag(X(QuantumRegister(1), 1), 1) == [0, exp(-im * pi / 4)]
         end
