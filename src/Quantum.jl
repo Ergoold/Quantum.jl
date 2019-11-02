@@ -1,7 +1,7 @@
 module Quantum
 
 using LinearAlgebra
-import Base: ==, isapprox, length
+import Base: ==, length
 
 export Swap, X, Y, Z, H, S, Sdag, T, Tdag, Rx, Ry, Rz, R, CNOT
 export QuantumRegister
