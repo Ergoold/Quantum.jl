@@ -3,7 +3,7 @@ module Quantum
 using LinearAlgebra
 import Base: ==, length
 
-export Swap, X, Y, Z, H, S, Sdag, T, Tdag, Rx, Ry, Rz, R, CNOT
+export Swap, X, Y, Z, H, S, Sdag, T, Tdag, Rx, Ry, Rz, R, CNOT, CZ
 export QuantumRegister
 
 mutable struct QuantumRegister
@@ -86,6 +86,8 @@ Rz(register::QuantumRegister, at::Int, θ::Float64) =
 R = Rz
 
 CNOT = controlled_gate([0 1 ; 1 0])
+
+CZ = controlled_gate([1 0 ; 0 -1])
 
 # Helper functions for the gates
 
