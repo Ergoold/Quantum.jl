@@ -3,12 +3,12 @@ module Quantum
 using LinearAlgebra
 import Base: ==, length
 
-export Swap, X, H, CNOT
+export Swap, X, Y, Z, H, S, Sdag, T, Tdag, Rx, Ry, Rz, R, CNOT
 export QuantumRegister
 
 mutable struct QuantumRegister
-    qubit_product::Vector{Float64}
-    QuantumRegister(length::Int) = new(vcat([1], zeros(Float64, 2^length - 1)))
+    qubit_product::Vector{Complex{Float64}}
+    QuantumRegister(length::Int) = new(vcat([1], zeros(Complex{Float64}, 2^length - 1)))
 end
 
 ==(register::QuantumRegister, vector::Vector) = register.qubit_product == vector
@@ -19,16 +19,42 @@ end
 # its length is 2^n (where n is the amount of qubits) and needs to be modified
 length(register::QuantumRegister) = log2size(register.qubit_product)
 
+# This function is placed here because it gives an `UndefVarError` bellow
+single_qubit_gate(matrix::Matrix) =
+    (register::QuantumRegister, at::Int) -> apply!(register, matrix, at)
+
 # This is where the real gates start
 
 Swap(register::QuantumRegister, from::Int, to::Int) =
     apply!(register, swap_matrix(abs(to - from) + 1), min(from, to))
 
-X(register::QuantumRegister, at::Int) =
-    apply!(register, [0 1 ; 1 0], at)
+X = single_qubit_gate([0 1 ; 1 0])
 
-H(register::QuantumRegister, at::Int) =
-    apply!(register, [1 / √2 1 / √2 ; 1 / √2 -1 / √2], at)
+Y = single_qubit_gate([0 -im ; im 0])
+
+Z = single_qubit_gate([1 0 ; 0 -1])
+
+H = single_qubit_gate([1/√2 1/√2 ; 1/√2 -1/√2])
+
+S = single_qubit_gate([1 0 ; 0 im])
+
+Sdag = single_qubit_gate([1 0 ; 0 -im])
+
+T = single_qubit_gate([1 0 ; 0 exp(im * pi / 4)])
+
+Tdag = single_qubit_gate([1 0 ; 0 exp(-im * pi / 4)])
+
+Rx(register::QuantumRegister, at::Int, θ::Float64) =
+    apply!(register, [cos(θ) -im * sin(θ) ; -im * sin(θ) cos(θ)], at)
+
+Ry(register::QuantumRegister, at::Int, θ::Float64) =
+    apply!(register, [cos(θ / 2) -im * -sin(θ / 2) ; -im * sin(θ) cos(θ / 2)], at)
+
+Rz(register::QuantumRegister, at::Int, θ::Float64) =
+    apply!(register, [0 1 ; 0 exp(im * θ)], at)
+
+# R is often used to denote Rz
+R = Rz
 
 function CNOT(register::QuantumRegister, control::Int, target::Int)
     _control = control
