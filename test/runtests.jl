@@ -52,5 +52,9 @@ using Quantum, Test
             @test Z(QuantumRegister(1), 1) == [1, 0]
             @test Z(X(QuantumRegister(1), 1), 1) == [0, -1]
         end
+        @testset "S" begin
+            @test S(QuantumRegister(1), 1) == [1, 0]
+            @test S(X(QuantumRegister(1), 1), 1) == [0, im]
+        end
     end
 end

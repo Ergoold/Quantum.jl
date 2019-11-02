@@ -3,7 +3,7 @@ module Quantum
 using LinearAlgebra
 import Base: ==, length
 
-export Swap, X, Y, Z, H, CNOT
+export Swap, X, Y, Z, H, S, CNOT
 export QuantumRegister
 
 mutable struct QuantumRegister
@@ -35,6 +35,9 @@ Z(register::QuantumRegister, at::Int) =
 
 H(register::QuantumRegister, at::Int) =
     apply!(register, [1 / √2 1 / √2 ; 1 / √2 -1 / √2], at)
+
+S(register::QuantumRegister, at::Int) =
+    apply!(register, [1 0 ; 0 im], at)
 
 function CNOT(register::QuantumRegister, control::Int, target::Int)
     _control = control
