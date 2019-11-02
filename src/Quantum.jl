@@ -1,9 +1,9 @@
 module Quantum
 
 using LinearAlgebra
-import Base: ==, length
+import Base: ==, isapprox, length
 
-export Swap, X, Y, Z, H, S, Sdag, T, Tdag, CNOT
+export Swap, X, Y, Z, H, S, Sdag, T, Tdag, Rx, Ry, Rz, R, CNOT
 export QuantumRegister
 
 mutable struct QuantumRegister
@@ -43,6 +43,18 @@ Sdag = single_qubit_gate([1 0 ; 0 -im])
 T = single_qubit_gate([1 0 ; 0 exp(im * pi / 4)])
 
 Tdag = single_qubit_gate([1 0 ; 0 exp(-im * pi / 4)])
+
+Rx(register::QuantumRegister, at::Int, θ::Float64) =
+    apply!(register, [cos(θ) -im * sin(θ) ; -im * sin(θ) cos(θ)], at)
+
+Ry(register::QuantumRegister, at::Int, θ::Float64) =
+    apply!(register, [cos(θ / 2) -im * -sin(θ / 2) ; -im * sin(θ) cos(θ / 2)], at)
+
+Rz(register::QuantumRegister, at::Int, θ::Float64) =
+    apply!(register, [0 1 ; 0 exp(im * θ)], at)
+
+# R is often used to denote Rz
+R = Rz
 
 function CNOT(register::QuantumRegister, control::Int, target::Int)
     _control = control
