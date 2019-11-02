@@ -55,6 +55,7 @@ using Quantum, Test
         @testset "S" begin
             @test S(QuantumRegister(1), 1) == [1, 0]
             @test S(X(QuantumRegister(1), 1), 1) == [0, im]
+            @test S(QuantumRegister(1), 1) == T(T(QuantumRegister(1), 1), 1)
         end
         @testset "Sdag" begin
             @test Sdag(QuantumRegister(1), 1) == [1, 0]
@@ -63,6 +64,7 @@ using Quantum, Test
         @testset "T" begin
             @test T(QuantumRegister(1), 1) == [1, 0]
             @test T(X(QuantumRegister(1), 1), 1) == [0, exp(im * pi / 4)]
+            @test T(T(QuantumRegister(1), 1), 1) == S(QuantumRegister(1), 1)
         end
         @testset "Tdag" begin
             @test Tdag(QuantumRegister(1), 1) == [1, 0]
