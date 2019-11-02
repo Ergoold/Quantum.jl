@@ -60,5 +60,9 @@ using Quantum, Test
             @test Sdag(QuantumRegister(1), 1) == [1, 0]
             @test Sdag(X(QuantumRegister(1), 1), 1) == [0, -im]
         end
+        @testset "T" begin
+            @test T(QuantumRegister(1), 1) == [1, 0]
+            @test T(X(QuantumRegister(1), 1), 1) == [0, exp(im * pi / 4)]
+        end
     end
 end
