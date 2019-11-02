@@ -3,7 +3,7 @@ module Quantum
 using LinearAlgebra
 import Base: ==, length
 
-export Swap, X, Y, Z, H, S, Sdag, T, Tdag, Rx, Ry, Rz, R, CNOT, CZ, CR
+export Swap, X, Y, Z, H, S, Sdag, T, Tdag, Rx, Ry, Rz, R, CNOT, CZ, CR, CRk
 export QuantumRegister
 
 mutable struct QuantumRegister
@@ -91,6 +91,9 @@ CZ = controlled_gate([1 0 ; 0 -1])
 
 CR(register::QuantumRegister, control::Int, target::Int, θ::Float64) =
     controlled_gate([0 1 ; 0 exp(im * θ)])(register, control, target)
+
+CRk(register::QuantumRegister, control::Int, target::Int, k::Float64) =
+    CR(register, control, target, 2π / 2 ^ k)
 
 # Helper functions for the gates
 
