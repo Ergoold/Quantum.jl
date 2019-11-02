@@ -7,8 +7,8 @@ export Swap, X, H, CNOT
 export QuantumRegister
 
 mutable struct QuantumRegister
-    qubit_product::Vector{Float64}
-    QuantumRegister(length::Int) = new(vcat([1], zeros(Float64, 2^length - 1)))
+    qubit_product::Vector{Complex{Float64}}
+    QuantumRegister(length::Int) = new(vcat([1], zeros(Complex{Float64}, 2^length - 1)))
 end
 
 ==(register::QuantumRegister, vector::Vector) = register.qubit_product == vector
