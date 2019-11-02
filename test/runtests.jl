@@ -56,5 +56,9 @@ using Quantum, Test
             @test S(QuantumRegister(1), 1) == [1, 0]
             @test S(X(QuantumRegister(1), 1), 1) == [0, im]
         end
+        @testset "Sdag" begin
+            @test Sdag(QuantumRegister(1), 1) == [1, 0]
+            @test Sdag(X(QuantumRegister(1), 1), 1) == [0, -im]
+        end
     end
 end
