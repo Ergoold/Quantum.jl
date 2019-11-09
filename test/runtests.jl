@@ -65,4 +65,14 @@ using Quantum, Test
             @test Tdag(X(QuantumRegister(1), 1), 1) == [0, exp(-im * pi / 4)]
         end
     end
+    @testset "Controlled Gates" begin
+        @testset "Single Control" begin
+            @test CZ(QuantumRegister(2), 1, 2) == [1, 0, 0, 0]
+            @test CZ(X(QuantumRegister(2), 1), 1, 2) == [0, 0, 1, 0]
+            @test CZ(X(QuantumRegister(2), 2), 1, 2) == [0, 1, 0, 0]
+            @test CZ(X(QuantumRegister(2), 1), 2, 1) == [0, 0, 1, 0]
+            @test CZ(X(QuantumRegister(2), 2), 2, 1) == [0, 1, 0, 0]
+            @test CZ(X(QuantumRegister(3), 1), 1, 3) == [0, 0, 0, 0, 1, 0, 0, 0]
+        end
+    end
 end

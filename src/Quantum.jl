@@ -3,7 +3,7 @@ module Quantum
 using LinearAlgebra
 import Base: ==, length
 
-export Swap, X, Y, Z, H, S, Sdag, T, Tdag, Rx, Ry, Rz, R, CNOT
+export Swap, X, Y, Z, H, S, Sdag, T, Tdag, Rx, Ry, Rz, R, CNOT, CZ, CR, CRk
 export QuantumRegister
 
 mutable struct QuantumRegister
@@ -19,9 +19,38 @@ end
 # its length is 2^n (where n is the amount of qubits) and needs to be modified
 length(register::QuantumRegister) = log2size(register.qubit_product)
 
-# This function is placed here because it gives an `UndefVarError` bellow
+# These functions are defined here because they give an `UndefVarError` bellow
+
 single_qubit_gate(matrix::Matrix) =
     (register::QuantumRegister, at::Int) -> apply!(register, matrix, at)
+
+controlled_gate(matrix::Matrix) = function(register::QuantumRegister, control::Int, target::Int)
+    _control = control
+    _target = target
+
+    if(control == length(register))
+        _control -= 1
+        Swap(register, control, _control)
+        if(_control == target)
+            _target = control
+        end
+    end
+
+    if(_control + 1 != _target)
+        _target = _control + 1
+        Swap(register, target, _target)
+    end
+
+    apply!(register, controlled_matrix(matrix), _control)
+
+    Swap(register, _target, target)
+
+    if(_control == _target)
+        Swap(register, _control, control)
+    end
+
+    register
+end
 
 # This is where the real gates start
 
@@ -56,35 +85,19 @@ Rz(register::QuantumRegister, at::Int, θ::Float64) =
 # R is often used to denote Rz
 R = Rz
 
-function CNOT(register::QuantumRegister, control::Int, target::Int)
-    _control = control
-    _target = target
+CNOT = controlled_gate([0 1 ; 1 0])
 
-    if(control == length(register))
-        _control -= 1
-        Swap(register, control, _control)
-        if(_control == target)
-            _target = control
-        end
-    end
+CZ = controlled_gate([1 0 ; 0 -1])
 
-    if(_control + 1 != _target)
-        _target = _control + 1
-        Swap(register, target, _target)
-    end
+CR(register::QuantumRegister, control::Int, target::Int, θ::Float64) =
+    controlled_gate([0 1 ; 0 exp(im * θ)])(register, control, target)
 
-    apply!(register, [1 0 0 0 ; 0 1 0 0 ; 0 0 0 1 ; 0 0 1 0], _control)
-
-    Swap(register, _target, target)
-
-    if(_control == _target)
-        Swap(register, _control, control)
-    end
-
-    register
-end
+CRk(register::QuantumRegister, control::Int, target::Int, k::Float64) =
+    CR(register, control, target, 2π / 2 ^ k)
 
 # Helper functions for the gates
+
+controlled_matrix(matrix::Matrix) = kron([1 0 ; 0 0], I₂) + kron([0 0 ; 0 1], matrix)
 
 function apply!(register::QuantumRegister, matrix::Matrix, from::Int)
     register.qubit_product = pad_matrix(matrix, length(register), from) * register.qubit_product
