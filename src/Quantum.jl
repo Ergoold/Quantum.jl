@@ -45,13 +45,13 @@ T = single_qubit_gate([1 0 ; 0 exp(im * pi / 4)])
 Tdag = single_qubit_gate([1 0 ; 0 exp(-im * pi / 4)])
 
 Rx(register::QuantumRegister, at::Int, θ::Float64) =
-    apply!(register, [cos(θ) -im * sin(θ) ; -im * sin(θ) cos(θ)], at)
+    single_qubit_gate([cos(θ) -im * sin(θ) ; -im * sin(θ) cos(θ)])(register, at)
 
 Ry(register::QuantumRegister, at::Int, θ::Float64) =
-    apply!(register, [cos(θ / 2) -im * -sin(θ / 2) ; -im * sin(θ) cos(θ / 2)], at)
+    single_qubit_gate([cos(θ / 2) -im * -sin(θ / 2) ; -im * sin(θ) cos(θ / 2)])(register, at)
 
 Rz(register::QuantumRegister, at::Int, θ::Float64) =
-    apply!(register, [0 1 ; 0 exp(im * θ)], at)
+    single_qubit_gate([0 1 ; 0 exp(im * θ)])(register, at)
 
 # R is often used to denote Rz
 R = Rz
